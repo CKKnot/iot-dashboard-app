@@ -9,6 +9,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+var tempMeasures = [];
 const COLORS_SERIES = [
   "#7A77FF",
   "#141446",
@@ -252,11 +253,11 @@ const renderChart = Component => ({ resultSet, error, ...props }) =>
   (resultSet && <Component resultSet={resultSet} {...props} />) ||
   (error && error.toString()) || <CircularProgress />;
 
-const ChartRenderer = ({ vizState }) => {
-  const { query, chartType, ...options } = vizState;
-  const component = TypeToMemoChartComponent[chartType];
-  const renderProps = useCubeQuery(query);
-  return component && renderChart(component)({ ...options, ...renderProps });
+  const ChartRenderer = ({ vizState, cubejsApi }) => {
+    const { query, chartType, ...options } = vizState;
+    const component = TypeToMemoChartComponent[chartType];
+    var renderProps = useCubeQuery(query, { subscribe: true, cubejsApi });;
+    return component && renderChart(component)({ ...options, ...renderProps });
 };
 
 ChartRenderer.propTypes = {

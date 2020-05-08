@@ -7,11 +7,17 @@ import { Layout } from "antd";
 import cubejs from "@cubejs-client/core";
 import { CubeProvider } from "@cubejs-client/react";
 import Header from "./components/Header";
-const API_URL = "http://localhost:4000";
+import WebSocketTransport from '@cubejs-client/ws-transport';
+//Cubejs initialization; Websocket initialization
 const CUBEJS_TOKEN =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1ODg3NzA3OTMsImV4cCI6MTU4ODg1NzE5M30.i_CZKCsCsFxME6CdNdf1UjtY6Jn9hPykpdoIY7hI3Rc";
-const cubejsApi = cubejs(CUBEJS_TOKEN, {
-  apiUrl: `${API_URL}/cubejs-api/v1`
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1ODg3OTIwNTIsImV4cCI6MTU4ODg3ODQ1Mn0.lDTH6yf7bqmbRan9yc6ro5OWl343m7JdgTst1v-L5Po";
+var ws = new WebSocketTransport({
+  authorization: CUBEJS_TOKEN,
+  apiUrl: "wss://546c811e.ap.ngrok.io",
+  hearBeatInterval: 10
+});
+var cubejsApi = cubejs({
+    transport: ws
 });
 const useStyles = makeStyles(theme => ({
   root: {
@@ -19,6 +25,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+//Define the layout of our web application
 const AppLayout = ({ children }) => {
   const classes = useStyles();
   return (
@@ -29,10 +36,20 @@ const AppLayout = ({ children }) => {
   );
 };
 
+//Setup for web application
 const App = ({ children }) => (
   <CubeProvider cubejsApi={cubejsApi}>
     <AppLayout>{children}</AppLayout>
   </CubeProvider>
 );
 
-export default App;
+//Function to handles WebSocket unsubscription
+function WebSocketUnsubscribe(messageid){
+  ws.sendMessage({unsubscribe: messageid})
+}
+
+//Export these as so that other class can use it
+export {
+  App,
+  WebSocketUnsubscribe
+}
