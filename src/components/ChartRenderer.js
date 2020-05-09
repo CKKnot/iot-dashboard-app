@@ -213,13 +213,19 @@ const TypeToChartComponent = {
   area: props => <D3Chart type="area" {...props} />,
   pie: props => <D3Chart type="pie" {...props} />,
   number: ({ resultSet }) => (
-    <Typography
+    <Typography numbercomponent={resultSet.series()[0].series[0].value}
+      id={resultSet.series()[0].key}
       variant="h4"
       style={{
         textAlign: "center"
       }}
     >
       {resultSet.seriesNames().map(s => resultSet.totalRow()[s.key])}
+      {/* {
+        (resultSet.series()[0].key == "Sensor.intruderCount" || resultSet.series()[0].key == "Sensor.wateringCount") ? 
+        extractNumberData(resultSet.series()[0].key + "," + resultSet.series()[0].series[0].value)
+        : null
+      } */}
     </Typography>
   ),
   table: ({ resultSet }) => (
@@ -268,4 +274,12 @@ ChartRenderer.defaultProps = {
   vizState: {},
   cubejsApi: null
 };
+
+// function extractNumberData (){
+//   setInterval(() => {
+//     return extractedNumberData;
+//   }, 1000);
+//   // console.log(incomingData);
+// }
+
 export default ChartRenderer;

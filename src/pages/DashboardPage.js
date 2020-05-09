@@ -1,4 +1,5 @@
 import React from "react";
+import ReactDOM from "react-dom";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -6,6 +7,16 @@ import ChartRenderer from "../components/ChartRenderer";
 import Dashboard from "../components/Dashboard";
 import DashboardItem from "../components/DashboardItem";
 import { CardActions } from "@material-ui/core";
+import { createMuiTheme, makeStyles, ThemeProvider  } from '@material-ui/core/styles';
+import blue from '@material-ui/core/colors/blue';
+const theme = createMuiTheme({
+   palette: {
+     primary: blue,
+     secondary: {
+         main: '#ff4081',
+      },
+   },
+ });
 var {WebSocketUnsubscribe} = require('../App');
 var mButton = "minute", hButton="hour", dButton="day", clickCount = 0;
 //Query data is here.
@@ -65,7 +76,7 @@ var DashboardItems = [
            "timeDimensions":[
               {
                  "dimension":"Sensor.timestamp",
-                 "granularity":"minute"
+                 "granularity":"hour"
               }
            ]
         },
@@ -83,7 +94,7 @@ var DashboardItems = [
            "timeDimensions":[
               {
                  "dimension":"Sensor.timestamp",
-                 "granularity":"minute"
+                 "granularity":"hour"
               }
            ]
         },
@@ -163,7 +174,6 @@ var DashboardPage = () => {
         <ChartRenderer vizState={item.vizState}/>
         {item.vizState.chartType == "line" && 
           <CardActions>
-            {/* <Button variant="contained" size="medium" color="primary" onClick={handleClick(sButton, item.id)}>Every Second</Button> */}
             <Button variant="contained" size="medium" color="primary" onClick={handleClick(mButton, item.name)}>Every Minute</Button>
             <Button variant="contained" size="medium" color="primary" onClick={handleClick(hButton, item.name)}>Hourly</Button>
             <Button variant="contained" size="medium" color="primary" onClick={handleClick(dButton, item.name)}>Daily</Button>
@@ -187,10 +197,11 @@ var DashboardPage = () => {
   );
   
   return DashboardItems.length ? (
-    <Dashboard>{DashboardItems.map(dashboardItem)}</Dashboard>
+   <ThemeProvider theme={theme}>
+      <Dashboard>{DashboardItems.map(dashboardItem)}</Dashboard>
+   </ThemeProvider>
   ) : (
     <Empty />
   );
 };
-
 export default DashboardPage;
