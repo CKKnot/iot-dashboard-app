@@ -13,7 +13,8 @@ const CUBEJS_TOKEN =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1ODg3OTIwNTIsImV4cCI6MTU4ODg3ODQ1Mn0.lDTH6yf7bqmbRan9yc6ro5OWl343m7JdgTst1v-L5Po";
 var ws = new WebSocketTransport({
   authorization: CUBEJS_TOKEN,
-  apiUrl: "wss://4b8ca5ed.ap.ngrok.io",
+  // apiUrl: "wss://7be9a22c.ap.ngrok.io",
+  apiUrl: "ws://localhost:4000",
   hearBeatInterval: 5
 });
 var cubejsApi = cubejs({
